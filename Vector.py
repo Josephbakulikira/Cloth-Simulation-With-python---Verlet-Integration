@@ -36,6 +36,10 @@ class Vector3:
         return Vector3(self.x / b, self.y / b, self.z / b)
 
 
+    def toMatrix(self):
+        return [[self.x], [self.y], [self.z]]
+
+
     def __repr__(self):
         return f'{self.x} , {self.y}, {self.z}'
 
@@ -65,6 +69,8 @@ class Vector2:
     def __truediv__(self, b):
         if type(b) is Vector2:
             return Vector2(self.x / b.x, self.y / b.y)
+        if b == 0:
+            return Vector2(0, 0)
         return Vector2(self.x / b, self.y / b)
 
     def TuplePosition(self):
@@ -73,6 +79,11 @@ class Vector2:
     def __repr__(self):
         return f'{self.x} , {self.y}'
 
+def toVector(mat):
+    if len(mat) == 2:
+        return Vector2(mat[0][0], mat[1][0])
+    else:
+        return Vector3(mat[0][0], mat[1][0], mat[2][0])
 def Distance(v1, v2):
     if type(v1) is Vector2 :
         return sqrt( (v1.x - v2.x)*(v1.x - v2.x) + (v1.y - v2.y)*(v1.y - v2.y) )

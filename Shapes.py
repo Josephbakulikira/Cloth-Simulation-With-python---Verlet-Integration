@@ -73,8 +73,6 @@ class Polygon:
             d_pos = self.vertices[self.joints[i][0]].position - self.vertices[self.joints[i][1]].position
             dl = ln - dist
             current =  d_pos * 0.5  * dl/dist
-            # self.vertices[self.joints[i][0]].position = self.vertices[self.joints[i][0]].position + current
-            # self.vertices[self.joints[i][1]].position = self.vertices[self.joints[i][1]].position - current
             pos1 = self.vertices[self.joints[i][0]]
             pos2 = self.vertices[self.joints[i][1]]
 
@@ -123,9 +121,27 @@ def Rope(position, length, n, radius=3, thickness=3, color=(53, 180, 200)):
 
 def Cloth(position, horiz, vertiz, t=20, radius= 5, thickness=3, color=(240, 240, 240)):
     x , y = position.x, position.y
-    vertices = [ Point(Vector2(x+i*t, y+j*t),  Vector2(x+i*t, y+j*t), radius) for j in range(vertiz) for i in range(horiz) ]
-    joints = [ [i, i+1] for i in range(len(vertices)) if i % horiz != horiz-1]
-    joints += [ [i, i+horiz] for i in range(len(vertices)-horiz)]
+    vertices = []
+    for j in range(vertiz):
+        for i in range(horiz):
+            vertices.append( Point(Vector2(x+i*t, y+j*t), Vector2(x+i*t, y+j*t), radius ) )
+
+    joints = []
+
+    # Horizontal connection
+    for i in range(len(vertices)-1):
+        if i % horiz != horiz -1:
+            joints.append([i, i+1])
+    # Vertical connection
+    for i in range(len(vertices) - horiz):
+        joints.append( [i, i+horiz] )
+
+    #first diagonal connection
+    for i in range(len(vertices) - horiz-1):
+        if i %horiz != horiz-1:
+            joints.append( [i, i + horiz + 1] )
+
     static = [vertices[0], vertices[horiz//2], vertices[horiz-1]]
+
 
     return Polygon(vertices, joints, static, thickness, color)
