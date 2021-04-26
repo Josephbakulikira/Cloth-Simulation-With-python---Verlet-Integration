@@ -1,4 +1,5 @@
 # Cloth-Simulation-With-python---Verlet-Integration
+####  simple Verlet Integration and a visualization with pygame... check the article for this project or video on youtube or on my website .
 ## Check out my youtube channel for more: https://www.youtube.com/results?search_query=auctux
 ### check out my website: https://www.auctux.com/
 ### sorry for the spaghetti , might rearrange the code later
