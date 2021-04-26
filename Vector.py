@@ -1,5 +1,5 @@
 from math import sqrt, pow
-
+from constants import *
 class Vector3:
     def __init__(self, x, y, z):
         self.x = x
@@ -74,7 +74,17 @@ class Vector2:
         return Vector2(self.x / b, self.y / b)
 
     def TuplePosition(self):
-        return (int(self.x), int(self.y))
+        x, y =self.x, self.y
+        if self.x > Width:
+            x = Width
+        elif self.x < 0:
+            x = 0
+
+        if self.y > Height:
+            y = Height
+        if self.y < 0:
+            y = 0
+        return (x, y)
 
     def __repr__(self):
         return f'{self.x} , {self.y}'

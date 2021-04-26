@@ -4,6 +4,8 @@ from Vector import *
 import colorsys
 import math
 
+
+
 def hsv2rgb(h,s,v):
     return tuple(round(i * 255) for i in colorsys.hsv_to_rgb(h,s,v))
 def Sigmoid(x):
@@ -14,7 +16,9 @@ class Point:
         self.position = position
         self.previousPosition = previousPosition
         self.radius = radius
-        self.color = (hsv2rgb(Sigmoid(math.sin((self.position.x/self.position.y)-self.position.y/self.position.x)), 1, 1))
+        self.color = (hsv2rgb((position.x+position.y)/1000 , 1, 1) )
+        self.isClicked = False
+
     def update(self):
         #compute velocity
         vel = self.position - self.previousPosition
@@ -27,7 +31,37 @@ class Point:
         self.previousPosition = self.position
         #update our current position
         self.position = self.position + vel
-        self.color = (hsv2rgb(Sigmoid(math.sin((self.position.x/self.position.y)-self.position.y/self.position.x)), 1, 1))
+
+
+    def HandleEvents(self, toggle=False, lockNodes=None, joints=None, i_vert= None, bSpace=False):
+        if toggle == False:
+            if pygame.mouse.get_pressed()[0]:
+                mousePosition = pygame.mouse.get_pos()
+                m = Vector2(mousePosition[0], mousePosition[1])
+                dist = Distance(m, self.position)
+                if dist < 10:
+                    toggle = True
+                    self.isClicked = True
+
+        if self.isClicked == True:
+            mousePosition = pygame.mouse.get_pos()
+            self.position = Vector2(mousePosition[0], mousePosition[1])
+            if pygame.mouse.get_pressed()[1]:
+                if self not in lockNodes:
+                    lockNodes.append(self)
+                else:
+                    lockNodes.remove(self)
+
+            if bSpace == True:
+                for joint in joints:
+                    if i_vert in joint:
+                        joints.remove(joint)
+                        break
+
+
+
+
+        self.color = (hsv2rgb((self.position.x+self.position.y)/1000 , 1, 1) )
 
 
     def Bound(self):
@@ -57,12 +91,13 @@ class Polygon:
         self.static = static
         self.dists = [ Distance( self.vertices[self.joints[i][0]].position, self.vertices[self.joints[i][1]].position ) for i in range(len(self.joints))]
         self.lineThickness = lineThickness
-
-    def Update(self):
+        self.showPoint = True
+    def Update(self, toggle, bSpace):
         for vertice in self.vertices:
             if not vertice in self.static:
                 vertice.Bound()
                 vertice.update()
+            vertice.HandleEvents(toggle, self.static, self.joints, self.vertices.index(vertice), bSpace)
         # self.ConstraintPolygon()
 
 
@@ -86,7 +121,7 @@ class Polygon:
                 # self.vertices[self.joints[i][1]].position = (self.vertices[self.joints[i][0]].position - current) * 2
 
 
-    def Draw(self, screen, showPoint=False):
+    def Draw(self, screen):
         if len(self.vertices) < 2:
             print("the polygon class must have more than two point")
             return
@@ -95,10 +130,9 @@ class Polygon:
             end_pos = self.vertices[self.joints[i][1]].position.TuplePosition()
             pygame.draw.line(screen, self.color, start_pos, end_pos, self.lineThickness)
 
-        if showPoint == True:
+        if self.showPoint == True:
             for i in range(len(self.vertices)):
                     self.vertices[i].Draw(screen)
-
 
 def Box(position, s,  length, thickness, color=(255, 23, 50)):
         vertices = [Point(position, position-1, s),
@@ -119,7 +153,7 @@ def Rope(position, length, n, radius=3, thickness=3, color=(53, 180, 200)):
 
     return Polygon(vertices, joints,static, thickness, color)
 
-def Cloth(position, horiz, vertiz, t=20, radius= 5, thickness=3, color=(240, 240, 240)):
+def Cloth(position, horiz, vertiz, t=20, radius= 5, thickness=3, vertical=True, horizontal=True, Diagonal1=False, Diagonal2=False,showPoint=False, color=(240, 240, 240)):
     x , y = position.x, position.y
     vertices = []
     for j in range(vertiz):
@@ -129,17 +163,25 @@ def Cloth(position, horiz, vertiz, t=20, radius= 5, thickness=3, color=(240, 240
     joints = []
 
     # Horizontal connection
-    for i in range(len(vertices)-1):
-        if i % horiz != horiz -1:
-            joints.append([i, i+1])
+    if horizontal == True:
+        for i in range(len(vertices)-1):
+            if i % horiz != horiz -1:
+                joints.append([i, i+1])
     # Vertical connection
-    for i in range(len(vertices) - horiz):
-        joints.append( [i, i+horiz] )
+    if vertical == True:
+        for i in range(len(vertices) - horiz):
+            joints.append( [i, i+horiz] )
 
     #first diagonal connection
-    for i in range(len(vertices) - horiz-1):
-        if i %horiz != horiz-1:
-            joints.append( [i, i + horiz + 1] )
+    if Diagonal1 == True:
+        for i in range(len(vertices) - horiz-1):
+            if i %horiz != horiz-1:
+                joints.append( [i, i + horiz + 1] )
+    # second diagonal connection
+    if Diagonal2 ==True:
+        for i in range(len(vertices) - horiz):
+            if i % horiz != 0:
+                joints.append( [i, i+horiz-1] )
 
     static = [vertices[0], vertices[horiz//2], vertices[horiz-1]]
 
