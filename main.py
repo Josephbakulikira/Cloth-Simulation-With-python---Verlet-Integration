@@ -26,7 +26,7 @@ SpaceButtonPressed = False
 run = True
 backSpace = False
 while run:
-    clock.tick(30)
+    deltaTime = clock.tick(30)
 
     if runButton.state == True:
         d = Cloth(Vector2(Width//2 - 200, Height//2 - 120), rowsInput.value, colsInput.value,
@@ -51,6 +51,7 @@ while run:
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_BACKSPACE:
                 backSpace = True
+
     if pygame.mouse.get_pressed()[2]:
         for vertice in d.vertices:
             vertice.isClicked=False
@@ -59,7 +60,6 @@ while run:
     d.showPoint = showPoint.state
     d.radiusPoint = radiusInput.value
     d.Draw(screen)
-
     d.ConstraintPolygon()
     #render ui
     panel.Render(screen)

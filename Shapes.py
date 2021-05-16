@@ -92,6 +92,8 @@ class Polygon:
         self.dists = [ Distance( self.vertices[self.joints[i][0]].position, self.vertices[self.joints[i][1]].position ) for i in range(len(self.joints))]
         self.lineThickness = lineThickness
         self.showPoint = True
+        self.deltaTime = 10
+
     def Update(self, toggle, bSpace):
         for vertice in self.vertices:
             if not vertice in self.static:
@@ -153,7 +155,7 @@ def Rope(position, length, n, radius=3, thickness=3, color=(53, 180, 200)):
 
     return Polygon(vertices, joints,static, thickness, color)
 
-def Cloth(position, horiz, vertiz, t=20, radius= 5, thickness=3, vertical=True, horizontal=True, Diagonal1=False, Diagonal2=False,showPoint=False, color=(240, 240, 240)):
+def Cloth(position, horiz, vertiz, t, radius= 5, thickness=3, vertical=True, horizontal=True, Diagonal1=False, Diagonal2=False,showPoint=False, color=(240, 240, 240)):
     x , y = position.x, position.y
     vertices = []
     for j in range(vertiz):
