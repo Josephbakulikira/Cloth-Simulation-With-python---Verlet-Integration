@@ -1,18 +1,20 @@
 from ui import *
 
 # UI
-panel = Panel()
+panel = Panel(position = (Width-350, 80), w= 335, h= 600, color=(0, 0, 0), alpha=128)
 runButton = Button("Run")
 
-connections = TextUI("SPRING POSITIONS", (Width-180, 120), (255, 255, 255))
-connections.fontSize = 30
+connections = TextUI("Parameters", (Width-180, 120), (255, 255, 255))
+showuiText = TextUI("Press 'U' to access the parameters ", (Width-280, 120), (255, 255, 255), "center")
+showuiText.fontSize = 23
+connections.fontSize = 25
+
 verticalText = TextUI("Vertical: ", (Width-245, 180), (255, 255, 255))
 horizontalText = TextUI("Horizontal: ", (Width-245, 220), (255, 255, 255))
 diagonal1Text = TextUI("Diagonal-1: ", (Width-245, 260), (255, 255, 255))
 diagonal2Text = TextUI("Diagonal-2: ", (Width-245, 300), (255, 255, 255))
 showpointText = TextUI("show Point: ", (Width-245, 350), (255, 255, 255))
-positionText = TextUI("PARAMETERS", (Width-180, 400), (255, 255, 255))
-positionText.fontSize = 30
+
 rowsText = TextUI("Cols: ",(Width-280, 440),(255, 255, 255))
 colsText = TextUI("Rows: ",(Width-140, 440),(255, 255, 255) )
 radiusText = TextUI("point-radius: ",(Width-240, 500),(255, 255, 255))

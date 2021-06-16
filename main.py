@@ -23,8 +23,11 @@ d = Cloth(Vector2(Width//2 - 200, Height//2 - 120), rowsInput.value, colsInput.v
 toggle = False
 
 SpaceButtonPressed = False
+clicked = False
+showUI = False
 run = True
 backSpace = False
+
 while run:
     deltaTime = clock.tick(30)
 
@@ -34,17 +37,20 @@ while run:
                         toggleHorizontal.state, toggleDiagonal1.state, toggleDiagonal2.state)
         runButton.state = False
 
-    screen.fill((0, 0, 0))
+    screen.fill((3, 4, 5))
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False;
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            clicked = True
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 run = False
             if event.key == pygame.K_SPACE:
                 SpaceButtonPressed = True
-
+            if event.key == pygame.K_u:
+                showUI = True
 
             textI = pygame.key.name(event.key)
             keyPressed = True
@@ -61,45 +67,39 @@ while run:
     d.radiusPoint = radiusInput.value
     d.Draw(screen)
     d.ConstraintPolygon()
+
     #render ui
-    panel.Render(screen)
-    runButton.HandleMouse()
-    runButton.Render(screen)
-    connections.Render(screen)
-
-    verticalText.Render(screen)
-    horizontalText.Render(screen)
-    diagonal1Text.Render(screen)
-    diagonal2Text.Render(screen)
-    showpointText.Render(screen)
-    positionText.Render(screen)
-    rowsText.Render(screen)
-    colsText.Render(screen)
-    radiusText.Render(screen)
-    thicknessText.Render(screen)
-    spacingText.Render(screen)
-
-    toggleVertical.HandleMouse()
-    toggleHorizontal.HandleMouse()
-    toggleDiagonal1.HandleMouse()
-    toggleDiagonal2.HandleMouse()
-    showPoint.HandleMouse()
-
-    toggleVertical.Render(screen)
-    toggleHorizontal.Render(screen)
-    toggleDiagonal1.Render(screen)
-    toggleDiagonal2.Render(screen)
-    showPoint.Render(screen)
-    rowsText.Render(screen)
-    colsText.Render(screen)
-    rowsInput.Render(screen, textI, backSpace, keyPressed)
-    colsInput.Render(screen, textI, backSpace, keyPressed)
-    radiusInput.Render(screen, textI, backSpace, keyPressed)
-    thicknessInput.Render(screen, textI, backSpace, keyPressed)
-    spacingInput.Render(screen, textI, backSpace, keyPressed)
+    if showUI:
+        panel.Render(screen)
+        runButton.Render(screen)
+        connections.Render(screen)
+        verticalText.Render(screen)
+        horizontalText.Render(screen)
+        diagonal1Text.Render(screen)
+        diagonal2Text.Render(screen)
+        showpointText.Render(screen)
+        rowsText.Render(screen)
+        colsText.Render(screen)
+        radiusText.Render(screen)
+        thicknessText.Render(screen)
+        spacingText.Render(screen)
+        toggleVertical.Render(screen,clicked)
+        toggleHorizontal.Render(screen,clicked)
+        toggleDiagonal1.Render(screen,clicked)
+        toggleDiagonal2.Render(screen,clicked)
+        showPoint.Render(screen, clicked)
+        rowsText.Render(screen)
+        colsText.Render(screen)
+        rowsInput.Render(screen, textI, backSpace, keyPressed)
+        colsInput.Render(screen, textI, backSpace, keyPressed)
+        radiusInput.Render(screen, textI, backSpace, keyPressed)
+        thicknessInput.Render(screen, textI, backSpace, keyPressed)
+        spacingInput.Render(screen, textI, backSpace, keyPressed)
+    else:
+        showuiText.Render(screen)
     backSpace = False
     keyPressed = False
     pygame.display.flip()
-
+    clicked = False
     SpaceButtonPressed = False
 pygame.quit()
