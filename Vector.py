@@ -50,10 +50,6 @@ class Vector2:
 def toVector(mat):
     if len(mat) == 2:
         return Vector2(mat[0][0], mat[1][0])
-    else:
-        return Vector3(mat[0][0], mat[1][0], mat[2][0])
 def Distance(v1, v2):
     if type(v1) is Vector2 :
         return sqrt( (v1.x - v2.x)*(v1.x - v2.x) + (v1.y - v2.y)*(v1.y - v2.y) )
-    elif type(v1) is Vector3 :
-        return sqrt( (v1.x - v2.x) *(v1.x - v2.x) + (v1.y - v2.y)*(v1.y - v2.y) + (v1.z - v2.z)*(v1.z - v2.z))
